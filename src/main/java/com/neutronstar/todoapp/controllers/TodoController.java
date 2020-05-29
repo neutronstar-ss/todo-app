@@ -36,7 +36,7 @@ public class TodoController {
 	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
 	public String showTodos(ModelMap model) {
 		String name = getLoggedInUserName(model);
-		 model.put("todos", todoService.getTodosByUser(name));
+		 model.put("todos", todosService.getTodosByUser(name));
 	        // model.put("todos", service.retrieveTodos(name));
 	        return "list-todos";
 	}
@@ -50,28 +50,24 @@ public class TodoController {
 	}
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
-	public String showAddTodoPage(ModelMap model) {
-		model.addAllAttributes("todo", new Todo());
-		return "todo";
-		
-	}
+    public String showAddTodoPage(ModelMap model) {
+        model.addAttribute("todo", new Todo());
+        return "todo";
+    }
 	
 	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
 	public String deleteTodo(@RequestParam Long id) {
-		todoService.deleteTodo(id);
+		todosService.deleteTodo(id);
 		// service.deleteTodo(id);
         return "redirect:/list-todos";
 	}
 	
-	 @RequestMapping(value = "/update-todo", method = RequestMethod.GET)
-	 public String showUpdateTodoPage(@RequestParam Long id, BindingResult result) {
-		 if(result.hasErrors()) {
-			 return "todo";
-		 }
-		 todo.setUserName(getLoggedInUserName(model));
-		 todoService.updateTodo(todo);
-		 return "redirect:/list-todos";
-	 }
+	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
+    public String showUpdateTodoPage(@RequestParam long id, ModelMap model) {
+        Todo todo = todosService.getTodoById(id).get();
+        model.put("todo", todo);
+        return "todo";
+    }
 	 
 	 @RequestMapping(value = "/add-todo", method = RequestMethod.POST)
 	    public String addTodo(ModelMap model, @Valid Todo todo, BindingResult result) {
@@ -81,7 +77,7 @@ public class TodoController {
 	        }
 
 	        todo.setUserName(getLoggedInUserName(model));
-	        todoService.saveTodo(todo);
+	        todosService.saveTodo(todo);
 	        return "redirect:/list-todos";
 	    }
 	
