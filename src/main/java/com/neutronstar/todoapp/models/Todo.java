@@ -27,14 +27,15 @@ public class Todo implements Serializable {
 	private Date targetDate;
 	
 	public Todo() {
-	}
+        super();
+    }
 
-	public Todo(Long id, String userName, String description, Date targetDate) {
-		this.id = id;
-		this.userName = userName;
-		this.description = description;
-		this.targetDate = targetDate;
-	}
+    public Todo(String user, String desc, Date targetDate, boolean isDone) {
+        super();
+        this.userName = user;
+        this.description = desc;
+        this.targetDate = targetDate;
+    }
 
 	public Long getId() {
 		return id;
